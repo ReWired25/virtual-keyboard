@@ -4,10 +4,41 @@
     box-sizing: border-box;
 }
 
-.keyboardWrapper {
+.wrapper {
+    width: 1280px;
+    height: 100vh;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.header {
+    height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.area {
+    width: 800px;
+    height: 100px;
+    padding: 10px;
+    margin-bottom: 20px;
+    font-size: 20px;
+}
+
+.keyboard-wrapper {
     display: flex;
     flex-wrap: wrap;
     gap: 5px;
+    width: 845px;
 }
 
 .key {
@@ -16,6 +47,60 @@
     justify-content: center;
     width: 50px;
     height: 50px;
-    border-radius: 5px;
+    border-radius: 4px;
     background-color: yellowgreen;
+}
+
+.Backspace {
+    width: 125px;
+}
+
+.Tab {
+    width: 70px;
+}
+
+.CapsLock {
+    width: 105px;
+}
+
+.Enter {
+    width: 125px;
+}
+
+.ShiftLeft {
+    width: 125px;
+}
+
+.ControlLeft {
+    width: 100px;
+}
+
+.Space {
+    width: 350px;
+}
+
+.info-wrapper {
+    padding: 20px 0;
+    width: 850px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.info-text {
+    font-size: 20px;
+}
+
+.footer {
+    height: 70px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.footer-link {
+    text-decoration: none;
+    color: yellowgreen;
+    font-size: 20px;
 }

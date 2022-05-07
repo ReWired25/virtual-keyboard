@@ -6,9 +6,6 @@ import Keys from './modules/keys-and-functions/keys';
 import { dictionaryClasses, dictionaryEn, dictionaryRu } from './modules/keys-and-functions/keyDictionary';
 import './style.scss';
 
-// create wrapper => create header, main (=> create main blocks), footer =>
-// append this in page
-
 class mainClass {
     constructor() {
         this.allKeys = null;
@@ -44,3 +41,5 @@ class mainClass {
     }
 }
 
+const contentClass = new mainClass();
+document.body.append(contentClass.createContent());

@@ -8,5 +8,9 @@ export default class createFooter {
         const githubFooter = document.createElement('a');
         githubFooter.innerHTML = githubName;
         githubFooter.href = githubLink;
+        githubFooter.classList.add('footer-link');
+
+        footerWrapper.append(githubFooter);
+        return footerWrapper;
     }
 }

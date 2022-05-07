@@ -12,6 +12,7 @@ module.exports = {
     path: path.resolve(__dirname, 'dist'),
     clean: true
   },
+  mode: whatMode ? 'production' : 'development',
   module: {
     rules: [
       {
