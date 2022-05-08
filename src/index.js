@@ -43,3 +43,9 @@ class mainClass {
 
 const contentClass = new mainClass();
 document.body.append(contentClass.createContent());
+
+console.log(contentClass.allKeys);
+
+document.addEventListener('keyup', (event) => {
+
+})
