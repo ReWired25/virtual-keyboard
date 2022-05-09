@@ -10,6 +10,7 @@ class MainClass {
     constructor() {
         this.allKeys = null;
         this.keysClass = new Keys();
+        this.textarea = null;
     }
 
     createContent() {
@@ -25,7 +26,8 @@ class MainClass {
         const mainClass = new createMain();
         const main = mainClass.addMain('main');
 
-        const textarea = mainClass.addTextarea('area');
+        this.textarea = mainClass.addTextarea('area');
+        this.textarea.setAttribute('autofocus', 'autofocus');
         const keyboardWrapper = mainClass.addKeyboardWrapper('keyboard-wrapper');
         const info = mainClass.addInfo('The keyboard is created in Windows OS', 
         'Switch language: left shift + left alt');
@@ -34,7 +36,7 @@ class MainClass {
         this.keysClass.fillKeys(dictionaryEn, this.allKeys);
 
         keyboardWrapper.append(...this.allKeys);
-        main.append(textarea, keyboardWrapper, info);
+        main.append(this.textarea, keyboardWrapper, info);
         wrapper.append(header, main, footer);
 
         return wrapper;
@@ -43,6 +45,9 @@ class MainClass {
 
 const contentClass = new MainClass();
 document.body.append(contentClass.createContent());
+contentClass.textarea.onblur = () => {
+    contentClass.textarea.focus();
+}
 
 class SwitchLanguageClass {
     constructor() {
@@ -134,6 +139,7 @@ class switchCaps {
 const capsSwitcher = new switchCaps();
 
 document.addEventListener('keydown', (event) => {
+    event.preventDefault();
     const key = event.code;
 
     if (!dictionaryClasses.includes(key)) {
@@ -162,7 +168,104 @@ document.addEventListener('keydown', (event) => {
         capsSwitcher.switcher();
         capsSwitcher.currStatus = false;
     }
+
+    const selectStart = contentClass.textarea.selectionStart;
+    const selectEnd = contentClass.textarea.selectionEnd;
+    const returnKeys = ['MetaLeft', 'CapsLock', 'ShiftLeft', 'ShiftRight', 'ControlLeft', 'ControlAlt', 'AltLeft', 'AltRight', 'Del'];
+
+    if (returnKeys.includes(key)) {
+        return;
+    } else if (key === 'Space') {
+        contentClass.textarea.setRangeText(' ', selectStart, selectEnd, 'end');
+    } else if (key === 'Tab') {
+        contentClass.textarea.setRangeText('    ', selectStart, selectEnd, 'end');
+    } else if (key === 'Backspace') {
+        if (selectStart === 0 && selectEnd - selectStart <= 0) {
+            return;
+        } else if (selectEnd - selectStart > 0) {
+            contentClass.textarea.setRangeText('', selectStart, selectEnd, 'end');
+        } else {
+            contentClass.textarea.setRangeText('', selectStart - 1, selectEnd, 'end');
+        }
+    } else if (key === 'Enter') {
+        contentClass.textarea.setRangeText('\n', selectStart, selectEnd, 'end');
+    }
+    else {
+        contentClass.textarea.setRangeText(contentClass.allKeys[index].innerHTML, selectStart, selectEnd, 'end');
+    }
 })
+
+class createMouseListeners {
+    constructor() {
+        this.returnKeys = ['Win', 'Ctrl', 'Ctrl', 'Alt', 'Alt', 'Del'];
+    }
+
+    createListeners() {
+        let keys = contentClass.allKeys;
+
+        for (let element of keys) {
+            if (this.returnKeys.includes(element.innerHTML)) {
+                continue;
+            } else if (element.innerHTML === 'Shift') {
+                element.onmousedown = () => {
+                    if (lang.currLanguage === 'en') {
+                        lang.dictionarySwitcher(dictionaryEnShift, 'enShift');
+                    } else if (lang.currLanguage === 'ru') {
+                        lang.dictionarySwitcher(dictionaryRuShift, 'ruShift');
+                    } else if (lang.currLanguage === 'capsLockEn') {
+                        lang.dictionarySwitcher(capsLockEnShift, 'capsLockEnShift');
+                    } else if (lang.currLanguage === 'capsLockRu') {
+                        lang.dictionarySwitcher(capsLockRuShift, 'capsLockRuShift');
+                    }
+                    element.classList.add('active');
+                    capsSwitcher.shiftStatus = true;
+                }
+                element.onmouseup = () => {
+                    if (lang.currLanguage === 'enShift') {
+                        lang.dictionarySwitcher(dictionaryEn, 'en');
+                    } else if (lang.currLanguage === 'ruShift') {
+                        lang.dictionarySwitcher(dictionaryRu, 'ru');
+                    } else if (lang.currLanguage === 'capsLockEnShift') {
+                        lang.dictionarySwitcher(capsLockEn, 'capsLockEn');
+                    } else if (lang.currLanguage === 'capsLockRuShift') {
+                        lang.dictionarySwitcher(capsLockRu, 'capsLockRu');
+                    }
+                    element.classList.remove('active');
+                    capsSwitcher.shiftStatus = false;
+                }
+            } else if (element.innerHTML === 'Caps Lock') {
+                element.onmousedown = () => {
+                    capsSwitcher.switcher();
+                    capsSwitcher.currStatus = false;
+                }
+                element.onmouseup = () => {
+                    capsSwitcher.currStatus = true;
+                }
+            } else if (element.classList.contains('Tab')) {
+                element.onclick = () => contentClass.textarea.setRangeText('    ', contentClass.textarea.selectionStart, contentClass.textarea.selectionEnd, 'end');
+            } else if (element.classList.contains('Space')) {
+                element.onclick = () => contentClass.textarea.setRangeText(' ', contentClass.textarea.selectionStart, contentClass.textarea.selectionEnd, 'end');
+            } else if (element.classList.contains('Backspace')) {
+                element.onclick = () => {
+                    if (contentClass.textarea.selectionStart === 0 && contentClass.textarea.selectionEnd - contentClass.textarea.selectionStart <= 0) {
+                        return;
+                    } else if (contentClass.textarea.selectionEnd - contentClass.textarea.selectionStart > 0) {
+                        contentClass.textarea.setRangeText('', contentClass.textarea.selectionStart, contentClass.textarea.selectionEnd, 'end');
+                    } else {
+                        contentClass.textarea.setRangeText('', contentClass.textarea.selectionStart - 1, contentClass.textarea.selectionEnd, 'end');
+                    }
+                }
+            } else if (element.classList.contains('Enter')) {
+                element.onclick = () => contentClass.textarea.setRangeText('\n', contentClass.textarea.selectionStart, contentClass.textarea.selectionEnd, 'end');
+            } else {
+                element.onclick = () => contentClass.textarea.setRangeText(element.innerHTML, contentClass.textarea.selectionStart, contentClass.textarea.selectionEnd, 'end');
+            }
+        }
+    }
+}
+
+const mouseEvents = new createMouseListeners();
+mouseEvents.createListeners()
 
 document.addEventListener('keyup', (event) => {
     let key = event.code;
