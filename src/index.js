@@ -187,6 +187,8 @@ document.addEventListener('keydown', (event) => {
         } else {
             contentClass.textarea.setRangeText('', selectStart - 1, selectEnd, 'end');
         }
+    } else if (key === 'Delete') {
+        contentClass.textarea.setRangeText('', selectStart, selectEnd + 1, 'end');
     } else if (key === 'Enter') {
         contentClass.textarea.setRangeText('\n', selectStart, selectEnd, 'end');
     }
@@ -197,7 +199,7 @@ document.addEventListener('keydown', (event) => {
 
 class createMouseListeners {
     constructor() {
-        this.returnKeys = ['Win', 'Ctrl', 'Ctrl', 'Alt', 'Alt', 'Del'];
+        this.returnKeys = ['Win', 'Ctrl', 'Ctrl', 'Alt', 'Alt'];
     }
 
     createListeners() {
@@ -255,6 +257,8 @@ class createMouseListeners {
                         contentClass.textarea.setRangeText('', contentClass.textarea.selectionStart - 1, contentClass.textarea.selectionEnd, 'end');
                     }
                 }
+            } else if (element.classList.contains('Delete')) {
+                element.onclick = () => contentClass.textarea.setRangeText('', contentClass.textarea.selectionStart, contentClass.textarea.selectionEnd + 1, 'end');
             } else if (element.classList.contains('Enter')) {
                 element.onclick = () => contentClass.textarea.setRangeText('\n', contentClass.textarea.selectionStart, contentClass.textarea.selectionEnd, 'end');
             } else {
