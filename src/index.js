@@ -171,7 +171,7 @@ document.addEventListener('keydown', (event) => {
 
     const selectStart = contentClass.textarea.selectionStart;
     const selectEnd = contentClass.textarea.selectionEnd;
-    const returnKeys = ['MetaLeft', 'CapsLock', 'ShiftLeft', 'ShiftRight', 'ControlLeft', 'ControlAlt', 'AltLeft', 'AltRight', 'Del'];
+    const returnKeys = ['MetaLeft', 'CapsLock', 'ShiftLeft', 'ShiftRight', 'ControlLeft', 'ControlRight', 'ControlAlt', 'AltLeft', 'AltRight', 'Del'];
 
     if (returnKeys.includes(key)) {
         return;
@@ -199,7 +199,7 @@ document.addEventListener('keydown', (event) => {
 
 class createMouseListeners {
     constructor() {
-        this.returnKeys = ['Win', 'Ctrl', 'Ctrl', 'Alt', 'Alt'];
+        this.returnKeys = ['Win', 'Ctrl', 'Alt'];
     }
 
     createListeners() {
