@@ -50,40 +50,48 @@ class SwitchLanguageClass {
 
         this.firstButton = null;
         this.secondButton = null;
+        this.currCtrl = null;
+        this.currAlt = null;
     }
 
-    switchFunc(eventCode, code) {
-        if(eventCode === code) {
-            if (this.currLanguage === 'en') {
-                contentClass.keysClass.fillKeys(dictionaryRu, contentClass.allKeys);
-                this.currLanguage = 'ru';
-            } else {
-                contentClass.keysClass.fillKeys(dictionaryEn, contentClass.allKeys);
-                this.currLanguage = 'en';
-            }
-            this.firstButton = null;
-            this.secondButton = null;
-        } else {
-            this.firstButton = null;
-            this.secondButton = null;
+    dictionarySwitcher(newDict, newLang) {
+        contentClass.keysClass.fillKeys(newDict, contentClass.allKeys);
+        lang.currLanguage = newLang;
+    }
+
+    switchFunc() {
+        if (this.currLanguage === 'en') {
+            this.dictionarySwitcher(dictionaryRu, 'ru');
+        } else if (this.currLanguage === 'ru') {
+            this.dictionarySwitcher(dictionaryEn, 'en');
+        } else if (this.currLanguage === 'capsLockEn') {
+            this.dictionarySwitcher(capsLockRu, 'capsLockRu');
+        } else if (this.currLanguage === 'capsLockRu') {
+            this.dictionarySwitcher(capsLockEn, 'capsLockEn');
+        } else if (this.currLanguage === 'capsLockEnShift') {
+            this.dictionarySwitcher(capsLockRuShift, 'capsLockRuShift');
+        } else if (this.currLanguage === 'capsLockRuShift') {
+            this.dictionarySwitcher(capsLockEnShift, 'capsLockEnShift');
         }
     }
 
-    switchLanguage(event, stop) {
-        if (stop) {
-            this.firstButton = null;
-            this.secondButton = null;
+    switchLanguage(event, isUp) {
+        if (isUp) {
+            if (event.code === 'ControlLeft') {
+                this.currCtrl = null;
+            } else if (event.code === 'AltLeft') {
+                this.currAlt = null;
+            }
             return;
         }
-        if (!this.firstButton) {
-            this.firstButton = event.code;
-        } else {
-            if (this.firstButton === 'ControlLeft') {
-                this.switchFunc(event.code, 'AltLeft');
-            }
-            if (this.firstButton === 'AltLeft') {
-                this.switchFunc(event.code, 'ControlLeft');
-            }
+
+        if (event.code === 'ControlLeft') {
+            this.currCtrl = true;
+        } else if (event.code === 'AltLeft') {
+            this.currAlt = true;
+        }
+        if (this.currCtrl && this.currAlt) {
+            this.switchFunc();
         }
     }
 }
@@ -93,32 +101,31 @@ const lang = new SwitchLanguageClass();
 class switchCaps {
     constructor() {
         this.currStatus = true;
+        this.shiftStatus = false;
     }
 
     switcher() {
         if (this.currStatus) {
-
-            if (lang.currLanguage === 'en') {
-                contentClass.keysClass.fillKeys(capsLockEn, contentClass.allKeys);
-                lang.currLanguage = 'capsLockEn';
-                return;
-            }
-            if (lang.currLanguage === 'ru') {
-                contentClass.keysClass.fillKeys(capsLockRu, contentClass.allKeys);
-                lang.currLanguage = 'capsLockRu';
-                return;
-            }
-
-            if (lang.currLanguage === 'capsLockEn') {
-                contentClass.keysClass.fillKeys(dictionaryEn, contentClass.allKeys);
-                lang.currLanguage = 'en';
-                return;
-            }
-            
-            if (lang.currLanguage === 'capsLockRu') {
-                contentClass.keysClass.fillKeys(dictionaryRu, contentClass.allKeys);
-                lang.currLanguage = 'ru';
-                return;
+            if (this.shiftStatus) {
+                if (lang.currLanguage === 'enShift') {
+                    lang.dictionarySwitcher(capsLockEnShift, 'capsLockEnShift');
+                } else if (lang.currLanguage === 'ruShift') {
+                    lang.dictionarySwitcher(capsLockRuShift, 'capsLockRuShift');
+                } else if (lang.currLanguage === 'capsLockEnShift') {
+                    lang.dictionarySwitcher(dictionaryEnShift, 'enShift');
+                } else if (lang.currLanguage === 'capsLockRuShift') {
+                    lang.dictionarySwitcher(dictionaryRuShift, 'ruShift');
+                }
+            } else {
+                if (lang.currLanguage === 'en') {
+                    lang.dictionarySwitcher(capsLockEn, 'capsLockEn');
+                } else if (lang.currLanguage === 'ru') {
+                    lang.dictionarySwitcher(capsLockRu, 'capsLockRu');
+                } else if (lang.currLanguage === 'capsLockEn') {
+                    lang.dictionarySwitcher(dictionaryEn, 'en');
+                } else if (lang.currLanguage === 'capsLockRu') {
+                    lang.dictionarySwitcher(dictionaryRu, 'ru');
+                }
             }
         }
     }
@@ -140,19 +147,20 @@ document.addEventListener('keydown', (event) => {
 
     if (key === 'ShiftLeft' || key === 'ShiftRight') {
         if (lang.currLanguage === 'en') {
-            contentClass.keysClass.fillKeys(dictionaryEnShift, contentClass.allKeys);
+            lang.dictionarySwitcher(dictionaryEnShift, 'enShift');
         } else if (lang.currLanguage === 'ru') {
-            contentClass.keysClass.fillKeys(dictionaryRuShift, contentClass.allKeys);
+            lang.dictionarySwitcher(dictionaryRuShift, 'ruShift');
         } else if (lang.currLanguage === 'capsLockEn') {
-            contentClass.keysClass.fillKeys(capsLockEnShift, contentClass.allKeys);
+            lang.dictionarySwitcher(capsLockEnShift, 'capsLockEnShift');
         } else if (lang.currLanguage === 'capsLockRu') {
-            contentClass.keysClass.fillKeys(capsLockRuShift, contentClass.allKeys);
+            lang.dictionarySwitcher(capsLockRuShift, 'capsLockRuShift');
         }
+        capsSwitcher.shiftStatus = true;
     }
 
     if (key === 'CapsLock') {
         capsSwitcher.switcher();
-        capsSwitcher.currStatus = 0;
+        capsSwitcher.currStatus = false;
     }
 })
 
@@ -167,21 +175,23 @@ document.addEventListener('keyup', (event) => {
 
     contentClass.allKeys[index].classList.remove('active');
 
-    lang.switchLanguage(null, true);
+    lang.switchLanguage(event, true);
 
     if (key === 'ShiftLeft' || key === 'ShiftRight') {
-        if (lang.currLanguage === 'en') {
-            contentClass.keysClass.fillKeys(dictionaryEn, contentClass.allKeys);
-        } else if (lang.currLanguage === 'ru') {
-            contentClass.keysClass.fillKeys(dictionaryRu, contentClass.allKeys);
-        } else if (lang.currLanguage === 'capsLockEn') {
-            contentClass.keysClass.fillKeys(capsLockEn, contentClass.allKeys);
-        } else if (lang.currLanguage === 'capsLockRu') {
-            contentClass.keysClass.fillKeys(capsLockRu, contentClass.allKeys);
+        if (lang.currLanguage === 'enShift') {
+            lang.dictionarySwitcher(dictionaryEn, 'en');
+        } else if (lang.currLanguage === 'ruShift') {
+            lang.dictionarySwitcher(dictionaryRu, 'ru');
+        } else if (lang.currLanguage === 'capsLockEnShift') {
+            lang.dictionarySwitcher(capsLockEn, 'capsLockEn');
+        } else if (lang.currLanguage === 'capsLockRuShift') {
+            lang.dictionarySwitcher(capsLockRu, 'capsLockRu');
         }
+
+        capsSwitcher.shiftStatus = false;
     }
 
     if (key === 'CapsLock') {
-        capsSwitcher.currStatus = 1;
+        capsSwitcher.currStatus = true;
     }
 })
