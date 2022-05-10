@@ -12,6 +12,20 @@ contentClass.textarea.onblur = () => {
   contentClass.textarea.focus();
 };
 
+window.onload = () => {
+  const currLanguage = localStorage.getItem('currLang');
+
+  if (currLanguage) {
+    if (currLanguage === 'en' || currLanguage === 'capsLockEn'
+    || currLanguage === 'enShift' || currLanguage === 'capsLockEnShift') {
+      lang.dictionarySwitcher(dictionaryEn, 'en');
+    } else if (currLanguage === 'ru' || currLanguage === 'capsLockRu'
+    || currLanguage === 'ruShift' || currLanguage === 'capsLockRuShift') {
+      lang.dictionarySwitcher(dictionaryRu, 'ru');
+    }
+  }
+};
+
 const capsSwitcher = new SwitchCaps();
 
 class CreateMouseListeners {

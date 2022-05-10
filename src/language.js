@@ -7,8 +7,6 @@ class SwitchLanguageClass {
   constructor() {
     this.currLanguage = 'en';
 
-    this.firstButton = null;
-    this.secondButton = null;
     this.currCtrl = null;
     this.currAlt = null;
   }
@@ -16,6 +14,7 @@ class SwitchLanguageClass {
   dictionarySwitcher(newDict, newLang) {
     contentClass.keysClass.fillKeys(newDict, contentClass.allKeys);
     this.currLanguage = newLang;
+    localStorage.setItem('currLang', newLang);
   }
 
   switchFunc() {
