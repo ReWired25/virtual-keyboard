@@ -30,7 +30,7 @@ class MainClass {
     const keyboardWrapper = mainClass.addKeyboardWrapper('keyboard-wrapper');
     const info = mainClass.addInfo(
       'The keyboard is created in Windows OS',
-      'Switch language: left shift + left alt',
+      'Switch language: left ctrl + left alt',
     );
 
     this.allKeys = this.keysClass.createKeys(dictionaryClasses);
