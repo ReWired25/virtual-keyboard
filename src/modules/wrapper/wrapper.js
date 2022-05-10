@@ -1,10 +1,13 @@
-export default class createWrapper {
-    constructor() {}
+export default class СreateWrapper {
+  constructor() {
+    this.lintVariable = 0;
+  }
 
-    addWrapper() {
-        const wrapper = document.createElement('div');
-        wrapper.classList.add('wrapper');
+  addWrapper() {
+    this.lintVariable += 1;
+    const wrapper = document.createElement('div');
+    wrapper.classList.add('wrapper');
 
-        return wrapper;
-    }
+    return wrapper;
+  }
 }
