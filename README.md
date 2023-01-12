@@ -1,4 +1,4 @@
-Virtual-keyboard task for [Rolling Scopes School](https://rs.school/) main front-end course.
+Virtual keyboard task for [Rolling Scopes School](https://rs.school/) main front-end course.
 
 In this project:
 * Webpack, ESLint, SCSS
